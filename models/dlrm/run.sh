@@ -1,0 +1,7 @@
+#!/bin/bash
+
+table_size=47
+indices_per_lookup=80
+batch_size=1024
+workers=1
+python -m torch.distributed.launch --nproc_per_node="${workers}" run.py --arch-mlp-bot 128-64-32 --arch-embedding-size "${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}-${table_size}" --arch-mlp-top 128-32-1 --arch-sparse-feature-size 32 --arch-interaction-op dot  --max-ind-range ${table_size} --num-batches 10 --mini-batch-size ${batch_size} --nepochs 1 --inference-only --use-gpu --num-indices-per-lookup ${indices_per_lookup} --num-indices-per-lookup-fixed True  --num-workers "${workers}" --data-generation random --dist-backend nccl
