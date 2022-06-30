@@ -19,7 +19,7 @@ def make_random_data_loader(iterations, batch_size, embedding_table_size_list, i
         dataset,
         batch_size=1,
         shuffle=False,
-        num_workers=len(embedding_table_size_list),
+        num_workers=len(embedding_table_size_list) * 2,
         collate_fn=collate_wrapper_random,
         pin_memory=True,
     )

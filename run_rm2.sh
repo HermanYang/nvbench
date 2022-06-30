@@ -66,15 +66,14 @@ function run() {
     rm -rf "${outdir}" && mkdir "${outdir}"
 
     worker_number=8
-    # batch_size_list=(1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384)
-    batch_size_list=(1 2 4 8)
+    batch_size_list=(1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536)
 
     info "run benchmark ${model}..."
 
     info "System Level profiling..."
     for batch_size in "${batch_size_list[@]}"
     do
-        command="bash ${NVBENCH_HOME}/models/${model}/run.sh --worker_number ${worker_number} --batch_size ${batch_size} --index_number_per_lookup 1"
+        command="bash ${NVBENCH_HOME}/models/${model}/run.sh --worker_number ${worker_number} --batch_size ${batch_size} --index_number_per_lookup 80"
         nsys profile --trace=cuda,nvtx --output "${outdir}/${model}_${worker_number}_${batch_size}" --force-overwrite true ${command}
         nsys export --type sqlite --output "${outdir}/${model}_${worker_number}_${batch_size}.sqlite" "${outdir}/${model}_${worker_number}_${batch_size}.nsys-rep"
     done
@@ -85,7 +84,7 @@ function run() {
     info "Power Draw Sampling..."
     for batch_size in "${batch_size_list[@]}"
     do
-        command="bash ${NVBENCH_HOME}/models/${model}/run.sh --worker_number ${worker_number} --batch_size ${batch_size} --index_number_per_lookup 1"
+        command="bash ${NVBENCH_HOME}/models/${model}/run.sh --worker_number ${worker_number} --batch_size ${batch_size} --index_number_per_lookup 80"
         bash "${NVBENCH_HOME}/cuprof/power_sampler" "${command}" "${outdir}/${model}_${worker_number}_${batch_size}_power_draw"
     done
 

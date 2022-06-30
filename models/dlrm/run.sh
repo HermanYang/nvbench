@@ -23,9 +23,11 @@ usage () {
   echo "USAGE: run.sh <benchmark>"
   echo
   echo "OPTIONS:"
-  echo "      -b, --batch_size          batch size                          [default: 1]"
-  echo "      -w, --worker_number       cards to use, one card per worker   [default: 1]"
-  echo "      -h, --help                show usage"
+  echo "      -b, --batch_size                      batch size                          [default: 1]"
+  echo "      -w, --worker_number                   cards to use, one card per worker   [default: 1]"
+  echo "      -l, --index_number_per_lookup         [default: 1]"
+  echo "      -i, --interation                      [default: 10]"
+  echo "      -h, --help                            show usage"
 }
 
 model_path="$(dirname "$0")"
@@ -34,8 +36,9 @@ function run(){
     export OMP_NUM_THREADS=4
     local batch_size=1
     local worker_number=1
-    # local table_size=47000000
-    local table_size=4700000
+    local table_size=47000000
+    local index_number_per_lookup=1
+    local iteration=10
 
     while (("$#")); do
         case "$1" in
@@ -47,6 +50,16 @@ function run(){
             -w | --worker_number)
                 shift
                 worker_number="$1"
+                shift
+                ;;
+            -l | --index_number_per_lookup)
+                shift
+                index_number_per_lookup="$1"
+                shift
+                ;;
+            -i | --iteration)
+                shift
+                iteration="$1"
                 shift
                 ;;
             -h | --help)
@@ -66,9 +79,9 @@ function run(){
             --mlp-top 128-32-1 \
             --category-feature-size 32 \
             --max-embedding-index ${table_size} \
-            --iterations 10 \
+            --iterations "${iteration}" \
             --batch-size "${batch_size}" \
-            --index-number-per-lookup 80  \
+            --index-number-per-lookup "${index_number_per_lookup}"  \
             --mode latency
     else
         torchrun --nproc_per_node="${worker_number}" \
@@ -77,9 +90,9 @@ function run(){
             --mlp-top 128-32-1 \
             --category-feature-size 32 \
             --max-embedding-index ${table_size} \
-            --iterations 10 \
+            --iterations "${iteration}" \
             --batch-size "${batch_size}"\
-            --index-number-per-lookup 80  \
+            --index-number-per-lookup "${index_number_per_lookup}" \
             --mode latency
     fi
 }

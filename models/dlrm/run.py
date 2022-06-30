@@ -36,7 +36,7 @@ def run():
     parser.add_argument('--mlp-top', type=dash_separated_ints, default='4-2-1')
     parser.add_argument('--interaction-itself', action='store_true', default=False)
     parser.add_argument('--activation-function', type=str, default='relu')
-    parser.add_argument('--iterations', type=int, default=0)
+    parser.add_argument('--iterations', type=int, default=1)
     parser.add_argument('--max-embedding-index', type=int, default=-1)
     parser.add_argument('--index-number-per-lookup', type=int, default=10)
     parser.add_argument('--batch-size', type=int, default=1)
