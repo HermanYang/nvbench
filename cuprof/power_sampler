@@ -9,14 +9,14 @@ cmd="$1"
 file_name="$2".csv
 
 test -z "$file_name" && rm -f "$file_name"
-column_names=$(nvidia-smi -q | grep "Product Name" | tr -s " " "," | cut  -d , -f 6 | tr -s "\n" ",")
-echo "$column_names" > "$file_name"
+column_names=$(nvidia-smi -q | grep "GPU UUID" | tr -s " " "," | cut -d , -f 5 | tr -s "\n" ",")
+printf "%s\n" "${column_names%,}"  >> "$file_name"
 
 function sampler
 {
     while true; do
         sample=$(nvidia-smi -q | grep "Power Draw" | tr -s " " "," | cut  -d , -f 5 | tr -s "\n" ",")
-        echo "$sample" >> "$file_name"
+        printf "%s\n" "${sample%,}"  >> "$file_name"
     done
 }
 
