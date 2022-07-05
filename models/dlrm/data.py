@@ -1,6 +1,7 @@
 from unicodedata import category
 import torch
 import numpy
+import multiprocessing
 from torch.utils.data import Dataset
 
 def make_random_data_loader(iterations, batch_size, embedding_table_size_list, index_number_per_lookup, numerical_feature_size, target_number, numerical_feature_dtype, category_feature_dtype):
@@ -19,7 +20,7 @@ def make_random_data_loader(iterations, batch_size, embedding_table_size_list, i
         dataset,
         batch_size=1,
         shuffle=False,
-        num_workers=len(embedding_table_size_list) * 2,
+        num_workers= multiprocessing.cpu_count(),
         collate_fn=collate_wrapper_random,
         pin_memory=True,
     )

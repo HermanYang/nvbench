@@ -600,5 +600,6 @@ CREATE VIEW step_inference_stats AS
         step_inference_range.local_rank,
         step_inference_range.globalTid,
         step_inference_range.start AS host_start,
-        step_inference_range.end AS host_end
+        step_inference_range.end AS host_end,
+        step_inference_range.duration AS host_duration
     FROM step_inference_range
